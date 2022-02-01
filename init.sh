@@ -1,21 +1,22 @@
 #!/bin/sh
 
 cat >/etc/nginx/conf.d/default.conf <<EOF
-server {
-    listen        $PORT default_server;
-    server_name   _;
+http {
+	access_log /dev/stdout;
+	server {
+		client_max_body_size 256M;
+		listen $PORT;
 
-    location / {
-        proxy_set_header Host $HOST;
-        proxy_set_header Referer $REFERER;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-        proxy_redirect off;
-        proxy_pass $TARGET;
-        proxy_set_header Upgrade \$http_upgrade;
-        proxy_set_header Connection "upgrade";
-        proxy_connect_timeout 60s;
-    }
+		location / {
+			proxy_pass "http://localhost:8080";
+			proxy_http_version 1.1;
+			proxy_buffering off;
+		}
+
+		if ($http_x_forwarded_proto != "https") {
+			rewrite ^(.*)$ https://$host$1 permanent;
+		}
+	}
 }
 EOF
 
