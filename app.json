@@ -3,18 +3,6 @@
   "description": "Deploy nginx-proxy on Heroku",
   "keywords": ["nginx-proxy"],
   "env": {
-    "TARGET": {
-       "description": "proxy_pass",
-       "value": ""
-    },
-    "HOST": {
-       "description": "proxy_set_header Host",
-       "value": ""
-    },
-    "REFERER": {
-       "description": "proxy_set_header Referer",
-       "value": ""
-    }
   },
   "website": "https://nginx.org/",
   "repository": "https://nginx.org/",
